@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en" data-palette="indigo">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EventPulse — College Events, Department of CSE (AIML)</title>
+  <meta name="description" content="EventPulse: upcoming college events, registration, gallery and contact. Made by Avik Dey.">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- ============ HEADER + NAV ============ -->
+  <header class="topbar" id="top">
+    <div class="container topbar-in">
+      <a href="#home" class="logo" aria-label="EventPulse home">
+        <span class="logo-mark">P</span>
+        <span class="logo-text"><b>EventPulse</b><small>Dept. of CSE (AIML) · IEM Kolkata</small></span>
+      </a>
+      <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="menu" id="menu" aria-label="Main">
+        <a href="#home">Home</a>
+        <a href="#events">Events</a>
+        <a href="#register">Register</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#about">About us</a>
+        <a href="#contact">Contact</a>
+        <button class="mode" id="modeBtn" aria-label="Switch to dark mode" title="Dark / light mode">☾</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ HOME ============ -->
+    <section class="hero" id="home">
+      <div class="container hero-in">
+        <div>
+          <p class="eyebrow">Live schedule · 2026</p>
+          <h1>Your campus,<br><em>always on.</em></h1>
+          <p class="lead">
+            EventPulse tracks every hackathon, workshop, talk and cultural night
+            at the Department of CSE (AIML), Institute of Engineering &amp; Management.
+            See what is coming, register in a minute, and be there.
+          </p>
+          <div class="cta">
+            <a href="#events" class="btn btn-solid">Browse events</a>
+            <a href="#register" class="btn btn-line">Register now</a>
+          </div>
+          <ul class="stats" aria-label="Quick facts">
+            <li><b id="statEvents">0</b><span>events</span></li>
+            <li><b id="statUpcoming">0</b><span>upcoming</span></li>
+            <li><b id="statRegs">0</b><span>registered on this device</span></li>
+          </ul>
+        </div>
+
+        <aside class="next" aria-live="polite">
+          <p class="next-tag">Next up</p>
+          <h2 id="nextTitle">Loading…</h2>
+          <p class="next-meta" id="nextMeta"></p>
+          <div class="timer" id="timer">
+            <div><b id="tD">00</b><span>days</span></div>
+            <div><b id="tH">00</b><span>hrs</span></div>
+            <div><b id="tM">00</b><span>min</span></div>
+            <div><b id="tS">00</b><span>sec</span></div>
+          </div>
+          <p class="clock">Kolkata time · <time id="clock">--:--:--</time></p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ============ EVENTS ============ -->
+    <section class="block" id="events">
+      <div class="container">
+        <header class="block-head">
+          <h2>Events</h2>
+          <p>Search by name or venue, or filter by type. Past events stay listed, marked as done.</p>
+        </header>
+
+        <div class="tools">
+          <div class="chips" id="chips" role="group" aria-label="Filter by category">
+            <button class="chip on" data-cat="all">All</button>
+            <button class="chip" data-cat="technical">Technical</button>
+            <button class="chip" data-cat="workshop">Workshop</button>
+            <button class="chip" data-cat="cultural">Cultural</button>
+            <button class="chip" data-cat="lecture">Lecture</button>
+          </div>
+          <label class="search">
+            <span class="sr">Search events</span>
+            <input type="search" id="search" placeholder="Search events…">
+          </label>
+        </div>
+
+        <div class="cards" id="cards"><!-- filled by js/script.js --></div>
+        <p class="none" id="none" hidden>No events match. Try a different word or category.</p>
+      </div>
+    </section>
+
+    <!-- ============ REGISTER ============ -->
+    <section class="block tint" id="register">
+      <div class="container split">
+        <header class="block-head">
+          <h2>Register</h2>
+          <p>One form per student per event. Your registration is saved on this device so you can see it below.</p>
+          <ul class="notes">
+            <li>Roll number: digits only (for example <code>12</code>).</li>
+            <li>Phone: 10-digit Indian mobile number.</li>
+            <li>Team events: every member registers separately.</li>
+          </ul>
+          <div class="mine" id="mine" hidden>
+            <h3>Your registrations</h3>
+            <ul id="mineList"></ul>
+            <button class="link" id="clearRegs" type="button">Clear list</button>
+          </div>
+        </header>
+
+        <form class="form" id="regForm" novalidate>
+          <div class="field">
+            <label for="name">Full name</label>
+            <input id="name" name="name" type="text" autocomplete="name" placeholder="e.g. Avik Dey">
+            <small class="err" id="e-name"></small>
+          </div>
+          <div class="two">
+            <div class="field">
+              <label for="roll">Roll number</label>
+              <input id="roll" name="roll" type="text" inputmode="numeric" placeholder="e.g. 12">
+              <small class="err" id="e-roll"></small>
+            </div>
+            <div class="field">
+              <label for="dept">Department</label>
+              <select id="dept" name="dept">
+                <option value="">Choose…</option>
+                <option>CSE (AIML)</option><option>CSE</option><option>CSBS</option>
+                <option>IT</option><option>ECE</option><option>EE</option><option>ME</option><option>CE</option>
+              </select>
+              <small class="err" id="e-dept"></small>
+            </div>
+          </div>
+          <div class="two">
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com">
+              <small class="err" id="e-email"></small>
+            </div>
+            <div class="field">
+              <label for="phone">Phone</label>
+              <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="10-digit mobile">
+              <small class="err" id="e-phone"></small>
+            </div>
+          </div>
+          <fieldset class="field">
+            <legend>Gender</legend>
+            <div class="radios">
+              <label><input type="radio" name="gender" value="Female"> Female</label>
+              <label><input type="radio" name="gender" value="Male"> Male</label>
+              <label><input type="radio" name="gender" value="Other"> Other</label>
+            </div>
+            <small class="err" id="e-gender"></small>
+          </fieldset>
+          <div class="field">
+            <label for="event">Event</label>
+            <select id="event" name="event"><option value="">Choose an event…</option></select>
+            <small class="err" id="e-event"></small>
+          </div>
+          <button class="btn btn-solid" type="submit">Submit registration</button>
+          <p class="status" id="regStatus" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ GALLERY ============ -->
+    <section class="block" id="gallery">
+      <div class="container">
+        <header class="block-head">
+          <h2>Gallery</h2>
+          <p>A look back at past events. Hover (or tap) a picture to see what it is.</p>
+        </header>
+        <div class="gallery">
+          <figure><img src="images/hackathon.svg"  alt="Hackathon illustration" loading="lazy"><figcaption>24-hour hackathon</figcaption></figure>
+          <figure><img src="images/techfest.svg"   alt="Tech fest illustration" loading="lazy"><figcaption>Annual tech fest</figcaption></figure>
+          <figure><img src="images/workshop.svg"   alt="Coding workshop illustration" loading="lazy"><figcaption>Hands-on workshop</figcaption></figure>
+          <figure><img src="images/cultural.svg"   alt="Cultural night illustration" loading="lazy"><figcaption>Cultural evening</figcaption></figure>
+          <figure><img src="images/robotics.svg"   alt="Robotics challenge illustration" loading="lazy"><figcaption>Robotics challenge</figcaption></figure>
+          <figure><img src="images/lecture.svg"    alt="Guest lecture illustration" loading="lazy"><figcaption>Guest lecture</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section class="block tint" id="about">
+      <div class="container split">
+        <div>
+          <header class="block-head"><h2>About us</h2></header>
+          <p>
+            The Department of Computer Science &amp; Engineering (AIML) at the Institute of
+            Engineering &amp; Management, Kolkata, teaches machine learning, data science and
+            software development through a four-year B.Tech programme.
+          </p>
+          <p>
+            EventPulse is a student-built website for the department's events. It was created
+            as an IT Workshop (PCCCS382) project using only HTML5, CSS3 and JavaScript.
+          </p>
+        </div>
+        <div class="team">
+          <h3>Who's behind it</h3>
+          <dl>
+            <div><dt>Developer</dt><dd>Avik Dey <span>Roll no. <span data-roll>68</span> · CSE (AIML)</span></dd></div>
+            <div><dt>Faculty guide</dt><dd>Dr. Sudipta Bhattacharya <span>Associate Professor, CSE (AIML)</span></dd></div>
+            <div><dt>Course</dt><dd>IT Workshop <span>PCCCS382</span></dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section class="block" id="contact">
+      <div class="container split">
+        <div>
+          <header class="block-head">
+            <h2>Contact</h2>
+            <p>Got a question about an event or spotted a mistake? Reach out.</p>
+          </header>
+          <address>
+            <p><b>Address</b><br>Department of CSE (AIML), Institute of Engineering &amp; Management,<br>Gurukul Campus, Sector V, Salt Lake, Kolkata 700091</p>
+            <p><b>Email</b><br><a href="mailto:avik.events@example.com">avik.events@example.com</a></p>
+            <p><b>Phone</b><br><a href="tel:+910000000000">+91 00000 00000</a></p>
+            <p><b>Office hours</b><br>Monday to Friday, 10:00 – 17:00</p>
+          </address>
+        </div>
+        <form class="form" id="fbForm" novalidate>
+          <h3>Send feedback</h3>
+          <div class="field"><label for="fbName">Your name</label><input id="fbName" type="text"><small class="err" id="e-fbName"></small></div>
+          <div class="field"><label for="fbEmail">Email</label><input id="fbEmail" type="email"><small class="err" id="e-fbEmail"></small></div>
+          <div class="field"><label for="fbMsg">Message</label><textarea id="fbMsg" rows="5" placeholder="At least 15 characters"></textarea><small class="err" id="e-fbMsg"></small></div>
+          <button class="btn btn-solid" type="submit">Send feedback</button>
+          <p class="status" id="fbStatus" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="container foot-in">
+      <p>© 2026 EventPulse · Built by Avik Dey (Roll <span data-roll>68</span>) · IT Workshop PCCCS382</p>
+      <a href="#top">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
